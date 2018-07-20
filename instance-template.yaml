@@ -1,0 +1,32 @@
+resources:
+- name: apache-template
+  type: compute.v1.instanceTemplate
+  properties:
+    properties:
+      description: apache
+      tags:
+        items:
+          - webserver
+      machineType: f1-micro
+      canIpForward: false
+      disks:
+      - deviceName: boot
+        type: PERSISTENT
+        boot: true
+        autoDelete: true
+        initializeParams:
+          sourceImage: projects/your_project/global/images/family/apache
+      networkInterfaces:
+      - network: projects/your_project/global/networks/default
+        accessConfigs:
+          - name: External NAT
+            type: ONE_TO_ONE_NAT
+      scheduling:
+        onHostMaintenance: MIGRATE
+        automaticRestart: true
+      serviceAccounts:
+        - email: default
+          scopes:
+          - https://www.googleapis.com/auth/compute.readonly
+          - https://www.googleapis.com/auth/devstorage.read_only
+          - https://www.googleapis.com/auth/service.management.readonly

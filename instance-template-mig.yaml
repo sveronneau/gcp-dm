@@ -15,7 +15,7 @@ resources:
         boot: true
         autoDelete: true
         initializeParams:
-          sourceImage: projects/your_prohject/global/images/family/apache
+          sourceImage: projects/your_project/global/images/family/apache
       networkInterfaces:
       - network: projects/your_project/global/networks/default
       scheduling:
@@ -46,3 +46,17 @@ resources:
             </body>
             </html>
             EOF
+- name: apache-mig
+  type: compute.v1.instanceGroupManagers
+  properties:
+    baseInstanceName: apache
+    instanceTemplate: $(ref.apache-template.selfLink)
+    targetSize: 2
+    zone: northamerica-northeast1-a
+- name: apache-as
+  type: compute.v1.autoscaler
+  properties:
+    zone: northamerica-northeast1-a
+    target: $(ref.apache-mig.selfLink)
+    autoscalingPolicy:
+      maxNumReplicas: 5

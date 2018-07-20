@@ -15,12 +15,9 @@ resources:
         boot: true
         autoDelete: true
         initializeParams:
-          sourceImage: projects/your_project/global/images/family/apache
+          sourceImage: projects/your_prohject/global/images/family/apache
       networkInterfaces:
       - network: projects/your_project/global/networks/default
-        accessConfigs:
-          - name: External NAT
-            type: ONE_TO_ONE_NAT
       scheduling:
         onHostMaintenance: MIGRATE
         automaticRestart: true
@@ -30,3 +27,23 @@ resources:
           - https://www.googleapis.com/auth/compute.readonly
           - https://www.googleapis.com/auth/devstorage.read_only
           - https://www.googleapis.com/auth/service.management.readonly
+      metadata:
+        items:
+        - key: startup-script
+          value: |
+            #!/bin/bash
+            INT_IP="$(ip route get 8.8.8.8 | awk '{print $NF; exit}')"
+            EXT_IP="$(curl -s ipinfo.io/ip)"
+            cat <<EOF > /var/www/html/index.html
+            <html>
+            <body>
+            <title>Apache Server - $(hostname)</title>
+            <img src="https://cloud.google.com/_static/9abbcf9aa7/images/cloud/gcp-logo.svg" alt="Google Cloud" height="51" width="400"><br><br>
+            <img src="https://www.datocms-assets.com/2885/1506457192-blog-packer-list.svg" alt="Packer" height="100" width="100">
+            <img src="https://www.datocms-assets.com/2885/1506457071-blog-terraform-list.svg" alt="Terraform" height="100" width="100">
+            <img src="https://blog-en.openalfa.com/iconos/logos/apache_httpd.jpg" alt="Apache" height="100" width="100">
+            <p><b>Hostname:</b> $(hostname)<br><b>Internal IP:</b> $INT_IP<br><b>External IP:</b> $EXT_IP</p>
+            <p>A <b>Packer</b> built, <b>Terraform</b> deployed, <b>GCP</b> Auto Scalling, Managed Instance Group with Load Balancer serving <b>Apache Web Server</b></p>
+            </body>
+            </html>
+            EOF

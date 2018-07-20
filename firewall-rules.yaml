@@ -1,0 +1,20 @@
+resources:
+- name: ssh-firewall-rule
+  type: compute.v1.firewall
+  properties:
+    sourceRanges: ["0.0.0.0/0"]
+    targetTags: ["webserver"]
+    allowed:
+    - IPProtocol: TCP
+      ports: ["22"]
+- name: all-internal-firewall-rule
+  type: compute.v1.firewall
+  properties:
+    sourceRanges: ["0.0.0.0/0"]
+    targetTags: ["webserver"]
+    allowed:
+    - IPProtocol: TCP
+      ports: ["80-443"]
+    - IPProtocol: UDP
+      ports: ["80-443"]
+    - IPProtocol: ICMP

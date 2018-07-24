@@ -1,0 +1,16 @@
+resources:
+  - name: apache-lb-hc
+    type: compute.v1.httpHealthCheck
+    properties:
+      port: 80
+      requestPath: /
+
+  - name: apache-bes
+    type: compute.v1.backendService
+    properties:
+      port: 80
+      portName: apache-http
+      backends:
+        - name: apache-be
+          group: apache-mig
+      healthChecks: apache-lb-hc

@@ -1,0 +1,6 @@
+resources:
+  - name: apache-lb-hc
+    type: compute.v1.httpHealthCheck
+    properties:
+      port: 80
+      requestPath: /

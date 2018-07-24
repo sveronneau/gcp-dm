@@ -5,12 +5,12 @@ resources:
       port: 80
       requestPath: /
 
-  - name: apache-bes
+  - name: apache-lb-bes
     type: compute.v1.backendService
     properties:
       port: 80
-      portName: apache-http
+      portName: http
       backends:
-        - name: apache-be
+        - name: apache-lb-bes
           group: apache-mig
-      healthChecks: apache-lb-hc
+      healthChecks: ["apache-lb-hc"]

@@ -9,9 +9,9 @@ resources:
       - name: bes
         balancingMode: UTILIZATION
         capacityScaler: 1.0
-        group: group: zones/northamerica-northeast1-a/instanceGroups/apache-mig
+        group: zones/northamerica-northeast1-a/instanceGroups/apache-mig
       maxUtilization: 0.8
       connectionDraining:
-      drainingTimeoutSec: 300
+        drainingTimeoutSec: 300
       healthChecks:
       - global/httpHealthChecks/apache-lb-hc

@@ -19,4 +19,16 @@ resources:
     type: compute.v1.urlMap
     properties:
       defaultService: $(ref.bes.selfLink)
-  - nme: 
+  - name: apache-http-proxy
+    type: compute.v1.targetHttpProxy
+    properties:
+      urlMap: $(ref.apache-url-map.selfLink)
+  - name: apache-ipaddress
+    type: compute.v1.globalAddress
+  - name: apache-http-forwardingrule
+    type: compute.v1.globalForwardingRule
+    properties:
+      target: $(ref.apache-http-proxy.selfLink)
+      IPAddress: $(ref.apache-ipaddress.address)
+      IPProtocol: TCP
+      portRange: 80-80

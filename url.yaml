@@ -1,0 +1,16 @@
+resources:
+- name: dav-url-map
+  type: compute.v1.urlMap
+  properties:
+    defaultService: bes
+    hostRules:
+    - hosts:
+      - dav.example.com
+      pathMatcher: path-matcher
+    pathMatchers:
+    - defaultService: bes
+      name: path-matcher
+      pathRules:
+      - paths:
+        - /
+        service: bes

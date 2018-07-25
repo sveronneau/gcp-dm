@@ -15,3 +15,8 @@ resources:
         drainingTimeoutSec: 300
       healthChecks:
       - global/httpHealthChecks/apache-lb-hc
+  - name: apache-url-map
+    type: compute.v1.urlMap
+    properties:
+      defaultService: $(ref.bes.selfLink)
+  - nme: 

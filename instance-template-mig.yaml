@@ -45,6 +45,7 @@ resources:
             </html>
             EOF
             (cd /etc/httpd/conf.d/ && curl -O https://raw.githubusercontent.com/Stackdriver/stackdriver-agent-service-configs/master/etc/httpd/conf.d/status.conf)
+            (cd /opt/stackdriver/collectd/etc/collectd.d/ && curl -O https://raw.githubusercontent.com/Stackdriver/stackdriver-agent-service-configs/master/etc/collectd.d/apache.conf)
 - name: apache-mig
   type: compute.v1.instanceGroupManagers
   properties:

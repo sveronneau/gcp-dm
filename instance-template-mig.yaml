@@ -32,8 +32,6 @@ resources:
         - key: startup-script
           value: |
             #!/bin/bash
-            INT_IP="$(ip route get 8.8.8.8 | awk '{print $NF; exit}')"
-            EXT_IP="$(curl -s ipinfo.io/ip)"
             cat <<EOF > /var/www/html/index.html
             <html>
             <body>
@@ -41,11 +39,12 @@ resources:
             <img src="https://cloud.google.com/_static/9abbcf9aa7/images/cloud/gcp-logo.svg" alt="Google Cloud" height="51" width="400"><br><br>
             <img src="https://www.datocms-assets.com/2885/1506457192-blog-packer-list.svg" alt="Packer" height="100" width="100">
             <img src="https://blog-en.openalfa.com/iconos/logos/apache_httpd.jpg" alt="Apache" height="100" width="100">
-            <p><b>Hostname:</b> $(hostname)<br><b>Internal IP:</b> $INT_IP<br><b>External IP:</b> $EXT_IP</p>
+            <p><b>Hostname:</b> $(hostname)</p>
             <p>A <b>Packer</b> built, <b>Deployment Manager</b> deployed, <b>GCP</b> Auto Scalling, Managed Instance Group with Load Balancer serving <b>Apache Web Server</b></p>
             </body>
             </html>
             EOF
+            (cd /etc/httpd/conf.d/ && curl -O https://raw.githubusercontent.com/Stackdriver/stackdriver-agent-service-configs/master/etc/httpd/conf.d/status.conf)
 - name: apache-mig
   type: compute.v1.instanceGroupManagers
   properties:
@@ -53,6 +52,9 @@ resources:
     instanceTemplate: $(ref.apache-template.selfLink)
     targetSize: 2
     zone: northamerica-northeast1-a
+    namedPorts:
+      name: http
+      port: 80
 - name: apache-as
   type: compute.v1.autoscaler
   properties:

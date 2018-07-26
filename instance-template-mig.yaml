@@ -52,9 +52,7 @@ resources:
     instanceTemplate: $(ref.apache-template.selfLink)
     targetSize: 2
     zone: northamerica-northeast1-a
-    namedPorts:
-      name: http
-      port: 80
+    namedPorts: ["http":80]
 - name: apache-as
   type: compute.v1.autoscaler
   properties:
